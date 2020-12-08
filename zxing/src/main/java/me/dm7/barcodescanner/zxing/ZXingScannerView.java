@@ -161,6 +161,12 @@ public class ZXingScannerView extends BarcodeScannerView {
 
                         stopCameraPreview();
                         if (tmpResultHandler != null) {
+                            if (finalRawResult != null) {
+                                Log.e("ZXing handler","finalRawResult: " + finalRawResult.toString());
+                            } else {
+                                Log.e("ZXing handler","finalRawResult: " + "fuuuuuuuuuuuuuuuuuuuuuuuuu.........");
+                            }
+
                             tmpResultHandler.handleResult(finalRawResult);
                         }
                     }
