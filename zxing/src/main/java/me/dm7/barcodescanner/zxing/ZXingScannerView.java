@@ -156,18 +156,31 @@ public class ZXingScannerView extends BarcodeScannerView {
                         // Stopping the preview can take a little long.
                         // So we want to set result handler to null to discard subsequent calls to
                         // onPreviewFrame.
+                        if (mResultHandler == null) {
+                            stopCameraPreview();
+                            return;
+                        }
+
+                        setResultHandlerToNull(finalRawResult);
+                    }
+
+                    private synchronized void setResultHandlerToNull(final Result finalRawResult) {
                         ResultHandler tmpResultHandler = mResultHandler;
                         mResultHandler = null;
 
                         stopCameraPreview();
+
                         if (tmpResultHandler != null) {
+                            Log.v("Zxing modified", "scanned code: " + finalRawResult.toString());
                             tmpResultHandler.handleResult(finalRawResult);
                         }
                     }
                 });
+
             } else {
                 camera.setOneShotPreviewCallback(this);
             }
+
         } catch(RuntimeException e) {
             // TODO: Terrible hack. It is possible that this method is invoked after camera is released.
             Log.e(TAG, e.toString(), e);
